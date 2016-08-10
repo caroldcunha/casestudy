@@ -7,10 +7,13 @@ public class DBClass {
 	
 	Connection conn = null;
 	Statement stmt = null;
-	public DBClass(){
+	
+	public DBClass(String dbHost,String dbPort,String dbName,String dbUser,String dbPasswd){
         try {
         	Class.forName("com.mysql.jdbc.Driver");
-    		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/devopsdb", "root", "P@ssw0rd");
+    		//conn = DriverManager.getConnection("jdbc:mysql://10.244.54.78:3306/devopsdb", "root", "Pspl@123");
+    		conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPasswd);
+
 			stmt = conn.createStatement();
         }catch(SQLException se){
 			   se.printStackTrace();

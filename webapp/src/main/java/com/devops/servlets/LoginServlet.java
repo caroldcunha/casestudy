@@ -16,7 +16,13 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		int ret_status=new DBClass().authenticate(Integer.parseInt(request.getParameter("id")),request.getParameter("passwd"));
+	    String dbHost = request.getParameter("dbhost");
+		String dbPort = request.getParameter("dbport");
+		String dbName = request.getParameter("dbname");
+		String dbUser = request.getParameter("dbuser");
+		String dbPasswd = request.getParameter("dbpasswd");
+		
+		int ret_status=new DBClass(dbHost ,dbPort ,dbName ,dbUser ,dbPasswd).authenticate(Integer.parseInt(request.getParameter("id")),request.getParameter("passwd"));
 		PrintWriter out=response.getWriter();
 		out.println(ret_status);
 		out.close();

@@ -13,10 +13,19 @@ import com.devops.DAO.DBClass;
 
 @SuppressWarnings("serial")
 public class LateStayServlet extends HttpServlet {
-
+	
+	    
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String dbHost = request.getParameter("dbhost");
+		String dbPort = request.getParameter("dbport");
+		String dbName = request.getParameter("dbname");
+		String dbUser = request.getParameter("dbuser");
+		String dbPasswd = request.getParameter("dbpasswd");
 		// TODO Auto-generated method stub
-		new DBClass().updateLateStay(Integer.parseInt(request.getParameter("id")),request.getParameter("location"),request.getParameter("action"));
+		new DBClass(dbHost ,dbPort ,dbName ,dbUser ,dbPasswd).updateLateStay(Integer.parseInt(request.getParameter("id")),request.getParameter("location"),request.getParameter("action"));
+		
+		
 	}
 
 }

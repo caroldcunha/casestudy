@@ -14,8 +14,15 @@ import com.devops.DAO.DBClass;
 public class LSCheckServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String dbHost = request.getParameter("dbhost");
+		String dbPort = request.getParameter("dbport");
+		String dbName = request.getParameter("dbname");
+		String dbUser = request.getParameter("dbuser");
+		String dbPasswd = request.getParameter("dbpasswd");
+		
 		// TODO Auto-generated method stub
-		int ret_status=new DBClass().lsCheck(Integer.parseInt(request.getParameter("id")));
+		int ret_status=new DBClass(dbHost ,dbPort ,dbName ,dbUser ,dbPasswd).lsCheck(Integer.parseInt(request.getParameter("id")));
 		PrintWriter out=response.getWriter();
 		out.println(ret_status);
 		out.close();
