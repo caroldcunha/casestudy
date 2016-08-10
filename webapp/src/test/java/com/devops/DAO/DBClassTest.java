@@ -8,13 +8,13 @@ public class DBClassTest extends TestCase {
     {
 		DBClass dc = new DBClass("10.244.54.78","3306","devopsdb","root","Pspl@123");
 		dc.closeConnection();
-		assertTrue( dc == null );
+		assertTrue( dc != null );
     }
 	
 	public void testDBClassAuthenticateCorrect()
     {
 		DBClass dc = new DBClass("10.244.54.78","3306","devopsdb","root","Pspl@123");
-		int ret = dc.authenticate(9, "pass");
+		int ret = dc.authenticate(11560, "12345");
 		assertTrue( ret == 1 );
     }
 	
