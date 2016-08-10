@@ -33,7 +33,7 @@ INSERT INTO `devopsdb`.`late_stay_list`
 `emp_location`)
 VALUES
 (20000,
-'Carol');
+'Margao');
 
 
  
