@@ -161,6 +161,16 @@ public class DBClass {
 			  }
 		   }
 	}
+public void closeConnection() {
+		// TODO Auto-generated method stub
+		try{
+			if(stmt!=null)
+				conn.close();
+		   }catch(Exception e){
+			   e.printStackTrace();
+		   }
+	}
+
 
 	public void deleteLateStay(Integer id) {
 		// TODO Auto-generated method stub
