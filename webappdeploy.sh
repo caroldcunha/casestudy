@@ -48,12 +48,23 @@ dbIP=`sudo docker inspect websrvTEST | grep -w "IPAddress" | head -1 | grep -E -
 #Run knife ssh command to execute chef-client command on WebSrvTEST
 #TODO  - knife ssh -u root -p pass $webIP <.......>
 
+#Now execute UI automation tests
+#TODO - run UI automation tests
+
+#Check results
+#if result is <= 90% pass - then 
+return non 0 value indicating build failure on TEST environment
+
+#else if success is > 90% then
+
+#Following is required to force svn to identify the file as changed 
+svn propset svn:executable ON  --username $svnUser  --password $svnPasswd --no-auth-cache --non-interactive --trust-server-cert --force warFile
+
+#TODO: Push war to svn with comment as "READY for STAGE"
+svn commit --username $svnUser --password $svnPasswd --no-auth-cache --non-interactive --trust-server-cert -m "Ready for STAGE" #Commit the file to SVN
 
 
-
-
-
-
+return 0
 
 
 
