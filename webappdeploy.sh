@@ -22,25 +22,33 @@ fi
 svn commit --username $svnUser --password $svnPasswd --no-auth-cache --non-interactive --trust-server-cert -m "Ready for TEST" #Commit the file to SVN
 
 #Run the Web Server container in TEST environment
-sudo docker  run -td -p 8022:22 -p 8088:8080  --name websrvTEST sumedh1988/ubuntussh:1404
+sudo docker  run -td -p 8022:22 -p 8088:8080  --name websrvTEST sumedh1988/ubuntussh:14.04
 
-#Retrive the server IP address
+#Retrieve the server IP address
 webIP=`sudo docker inspect websrvTEST | grep -w "IPAddress" | head -1 | grep -E -o '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'`
 
-
 #Run the database server container in TEST environment
-sudo docker  run -td -p 8022:22 -p 8306:3306  --name websrvTEST sumedh1988/ubuntussh:1404
+sudo docker  run -td -p 8023:22 -p 8306:3306  --name dbsrvTEST sumedh1988/ubuntussh:14.04
 
-#Retrive the server IP address
-dbIP=`sudo docker inspect websrvTEST | grep -w "IPAddress" | head -1 | grep -E -o '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'`
+#Retrieve the server IP address
+dbIP=`sudo docker inspect dbsrvTEST | grep -w "IPAddress" | head -1 | grep -E -o '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'`
 
+echo "[WebServer]" > host
+echo $webIP  "ansible_ssh_pass=pass" >> host
+echo "" >> host
+ echo "[DbServer]" >> host
+echo $dbIP  "ansible_ssh_pass=pass" >> host
+
+#following env variable disables host key checking - when not using key based authentication
+export ANSIBLE_HOST_KEY_CHECKING=False
 
 #Run Ansible Playbook for WEB Server host to Install Tomact
 #TODO HERE - Use the IP address obtained above (webIP)
+ansible-playbook -i hosts -u root tomcat.yml  --extra-vars "hosts=$webIP"
 
-#Run Ansible Playbook for WEB Server host to Install MySQL (this playbook should also enable remote login for the user)
+#Run Ansible Playbook for DB Server host to Install MySQL (this playbook should also enable remote login for the user)
 #TODO HERE - Use the IP address obtained above (dbIP)
-
+ansible-playbook -i hosts -u root mysql.yml --extra-vars "hosts=$dbIP"
 
 #Run knife bootstrap command to bootstrap the websrvTEST server as a node
 #TODO - knife bootstrap -u root -p pass $webIP -N websrvTEST -runlist 'recipe:deploywar'

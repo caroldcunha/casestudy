@@ -1,0 +1,8 @@
+[websrvTEST]
+172.17.0.2 ansible_ssh_pass=pass 
+
+[dbsrvTEST]
+172.17.0.3
+
+[websrvTESTTwo]
+172.17.0.4 ansible_ssh_pass=pass

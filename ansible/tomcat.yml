@@ -1,0 +1,28 @@
+---
+- hosts: '{{ hosts }}'
+  user: root
+  environment:
+        http_proxy: http://carol_dcunha:msgre%402017@hjproxy.persistent.co.in:8080
+        https_proxy: https://carol_dcunha:msgre%402017@hjproxy.persistent.co.in:8080
+        ftp_proxy: ftp://carol_dcunha:msgre%402017@hjproxy.persistent.co.in:8080
+  tasks:
+   - name: Install JDK
+     apt: pkg=openjdk-7-jdk state=installed update_cache=true
+
+   - name: Download Tomcat
+     get_url: url=http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.32/bin/apache-tomcat-6.0.32.tar.gz dest=/opt/apache-tomcat-6.0.32.tar.gz
+
+   - name: Extract archive
+     command: chdir=/usr/local /bin/tar xvf /opt/apache-tomcat-6.0.32.tar.gz -C /opt/ creates=/opt/apache-tomcat-6.0.32
+
+   - name: Symlink install directory
+     file: src=/opt/apache-tomcat-6.0.32 path=/usr/local/tomcat state=link
+
+   - name: Create script
+     copy: src=tomcatscript.sh dest=/root/tomcatscript.sh mode=0555
+
+   - name: Execute script
+     script: tomcatscript.sh
+
+   - name: restart system
+     local_action: wait_for host={{ ansible_ssh_host }} state=started port=22 delay=30 timeout=300 connect_timeout=15 
