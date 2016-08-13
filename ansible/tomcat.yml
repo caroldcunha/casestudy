@@ -5,24 +5,26 @@
         http_proxy: http://carol_dcunha:msgre%402017@hjproxy.persistent.co.in:8080
         https_proxy: https://carol_dcunha:msgre%402017@hjproxy.persistent.co.in:8080
         ftp_proxy: ftp://carol_dcunha:msgre%402017@hjproxy.persistent.co.in:8080
+
+  vars:
+     tomcat_path: /opt/apache-tomcat-6.0.32
+
   tasks:
+  
    - name: Install JDK7
      apt: pkg=openjdk-7-jdk state=installed update_cache=true
 
    - name: Download Tomcat
-     get_url: url=http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.32/bin/apache-tomcat-6.0.32.tar.gz dest=/opt/apache-tomcat-6.0.32.tar.gz
+     get_url: url=http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.32/bin/apache-tomcat-6.0.32.tar.gz dest="{{ tomcat_path }}.tar.gz"
 
    - name: Extract archive
-     command: chdir=/usr/local /bin/tar xvf /opt/apache-tomcat-6.0.32.tar.gz -C /opt/ creates=/opt/apache-tomcat-6.0.32
+     command: chdir=/usr/local /bin/tar xvf "{{ tomcat_path }}.tar.gz" -C /opt/ creates={{ tomcat_path }}
 
    - name: Symlink install directory
-     file: src=/opt/apache-tomcat-6.0.32 path=/usr/local/tomcat state=link
+     file: src={{ tomcat_path }} path=/usr/local/tomcat state=link
 
    - name: Set environment variables
      script: tomcatscript.sh
 
    - name: Modify tomcat-users
-     replace: dest=/opt/apache-tomcat-6.0.32/conf/tomcat-users.xml regexp='^(</tomcat-users>)$' replace='<role rolename="manager-gui"/>\n<user username="tomcat" password="tomcat" roles="manager-gui"/>\n\1'
-
-   - name: Restart system
-     local_action: wait_for host={{ ansible_ssh_host }} state=started port=22 delay=30 timeout=300 connect_timeout=15 
+     replace: dest="{{ tomcat_path }}/conf/tomcat-users.xml" regexp='^(</tomcat-users>)$' replace='<role rolename="manager-gui"/>\n<user username="tomcat" password="tomcat" roles="manager-gui"/>\n\1'
