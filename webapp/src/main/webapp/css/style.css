@@ -48,5 +48,9 @@ fieldset{
 }
 
 #form{
+<<<<<<< HEAD
 	height:200px;
+=======
+	height:400px;
+>>>>>>> b7b99354840a04a0552a4e230e51928e5bccc4ac
 }

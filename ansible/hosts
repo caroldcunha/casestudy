@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 [WebServer]
 172.17.0.2 ansible_ssh_pass=pass
 
 [DbServer]
 172.17.0.3 ansible_ssh_pass=pass
+=======
+[websrvTEST]
+172.17.0.2 ansible_ssh_pass=pass 
+
+[dbsrvTEST]
+172.17.0.3
+
+[websrvTESTTwo]
+172.17.0.4 ansible_ssh_pass=pass
+>>>>>>> b7b99354840a04a0552a4e230e51928e5bccc4ac

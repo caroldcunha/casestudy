@@ -1,4 +1,5 @@
 package com.devops.DAO;
+<<<<<<< HEAD
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -7,10 +8,17 @@ import java.util.Properties;
 import com.devops.BO.Employee;
 
 
+=======
+import java.sql.*;
+
+import com.devops.BO.Employee;
+
+>>>>>>> b7b99354840a04a0552a4e230e51928e5bccc4ac
 public class DBClass {
 	
 	Connection conn = null;
 	Statement stmt = null;
+<<<<<<< HEAD
 	String dbHost,dbPort,dbName,dbUser,dbPasswd;
 	
 	public DBClass(){
@@ -39,6 +47,11 @@ public class DBClass {
 		}
 		
 		try {
+=======
+	
+	public DBClass(String dbHost,String dbPort,String dbName,String dbUser,String dbPasswd){
+        try {
+>>>>>>> b7b99354840a04a0552a4e230e51928e5bccc4ac
         	Class.forName("com.mysql.jdbc.Driver");
     		//conn = DriverManager.getConnection("jdbc:mysql://10.244.54.78:3306/devopsdb", "root", "Pspl@123");
     		conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName, dbUser, dbPasswd);
