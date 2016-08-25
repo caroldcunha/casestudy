@@ -4,7 +4,6 @@
   environment:
         http_proxy: "{{ http_proxy }}"
         https_proxy: "{{ https_proxy }}" 
-        ftp_proxy: "{{ ftp_proxy }}"
 
   tasks:
     - name: Install needed packages
@@ -12,6 +11,13 @@
       with_items:
         - libaio1
         - libaio-dev
+        - python-mysqldb
+
+    - name: Set MySQL root password before installing
+      debconf: name='mysql-server' question='mysql-server/root_password' value='{{mysql_root_password | quote}}' vtype='password'
+  
+    - name: Confirm MySQL root password before installing
+      debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{mysql_root_password | quote}}' vtype='password'
 
     - name: Add mysql user and group
       command: "{{ item }}"
@@ -30,3 +36,7 @@
  
     - name: Edit config.ini file
       replace: dest=/etc/my.cnf regexp='^\[mysql_cluster\]' replace='[mysql_cluster]\nndb-connectstring={{ mgmtIP }}'
+
+    - name: Create root2 user in mysql
+      mysql_user: name=root2 password="{{mysql_root_password}}" priv=*.*:ALL,GRANT state=present login_user=root login_password="{{mysql_root_password}}"
+
