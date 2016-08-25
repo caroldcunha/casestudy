@@ -1,0 +1,42 @@
+---
+
+
+- hosts: '{{ mgmtIP }}'
+  tasks:
+    - name: Start Management Node
+      command: "{{ item }}"
+      with_items:
+        - mkdir -p /usr/local/mysql/mysql-cluster
+        - /usr/local/bin/ndb_mgmd -f /var/lib/mysql-cluster/config.ini
+
+
+- hosts: '{{ dataIP1 }}'
+  tasks:
+    - name: Start Data Node 1
+      command: /usr/local/bin/ndbd
+
+
+
+- hosts: '{{ dataIP2 }}'
+  tasks:
+    - name: Start Data Node 2
+      command: /usr/local/bin/ndbd
+
+     
+- hosts: '{{ sqlIP }}'
+  tasks:
+    - name: Start Sql Node
+      command: /etc/init.d/mysql.server start
+
+    - name: Set MySQL root password before installing
+      debconf: name='mysql-server' question='mysql-server/root_password' value='{{mysql_root_password | quote}}' vtype='password'
+  
+    - name: Confirm MySQL root password before installing
+      debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{mysql_root_password | quote}}' vtype='password'
+
+    - name: Create root2 user in mysql
+      mysql_user: name=root2 password="{{mysql_root_password}}" priv=*.*:ALL,GRANT state=present login_user=root login_password="{{mysql_root_password}}"
+
+- environment:
+        http_proxy: "{{ http_proxy }}"
+        https_proxy: "{{ https_proxy }}"
