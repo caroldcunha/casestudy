@@ -27,13 +27,7 @@
   tasks:
     - name: Start Sql Node
       command: /etc/init.d/mysql.server start
-
-    - name: Set MySQL root password before installing
-      debconf: name='mysql-server' question='mysql-server/root_password' value='{{mysql_root_password | quote}}' vtype='password'
-  
-    - name: Confirm MySQL root password before installing
-      debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{mysql_root_password | quote}}' vtype='password'
-
+      
     - name: Create root2 user in mysql
       mysql_user: name=root2 password="{{mysql_root_password}}" priv=*.*:ALL,GRANT state=present login_user=root login_password="{{mysql_root_password}}"
 
