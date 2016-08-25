@@ -3,7 +3,7 @@
 current_dir = File.dirname(__FILE__)
 log_level                :info
 log_location             STDOUT
-node_name                "admin"
+node_name                "caroldcunha"
 client_key               "#{current_dir}/caroldcunha.pem"
 chef_server_url          "https://10.51.224.67/organizations/carolchef"
 cookbook_path            ["#{current_dir}/../cookbooks"]
